@@ -1,6 +1,6 @@
 {
   "name": "@dolosplus/zebra-capacitor",
-  "version": "0.0.8",
+  "version": "1.0.0",
   "description": "Zebra printer capacitor plugin library with ZSDK API",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -17,10 +17,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jakratiwanich-ns/zebralib.git.git"
+    "url": "git+https://github.com/dolosplus/zebralib.git.git"
   },
   "bugs": {
-    "url": "https://github.com/jakratiwanich-ns/zebralib.git/issues"
+    "url": "https://github.com/dolosplus/zebralib.git/issues"
   },
   "keywords": [
     "capacitor",
