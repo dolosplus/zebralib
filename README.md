@@ -18,8 +18,9 @@ npx cap sync
 * [`connectPrinter(...)`](#connectprinter)
 * [`printText(...)`](#printtext)
 * [`printPDF(...)`](#printpdf)
-* [`addListener(...)`](#addlistener)
+* [`addListener('printerStatusChange', ...)`](#addlistenerprinterstatuschange)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -71,16 +72,16 @@ printPDF(options: { base64: string; }) => Promise<any>
 --------------------
 
 
-### addListener(...)
+### addListener('printerStatusChange', ...)
 
 ```typescript
 addListener(eventName: 'printerStatusChange', listenerFunc: StateChangeListener) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
-| Param              | Type                                          |
-| ------------------ | --------------------------------------------- |
-| **`eventName`**    | <code>"printerStatusChange"</code>            |
-| **`listenerFunc`** | <code>(state: ConnectState) =&gt; void</code> |
+| Param              | Type                                                                |
+| ------------------ | ------------------------------------------------------------------- |
+| **`eventName`**    | <code>'printerStatusChange'</code>                                  |
+| **`listenerFunc`** | <code><a href="#statechangelistener">StateChangeListener</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -95,5 +96,20 @@ addListener(eventName: 'printerStatusChange', listenerFunc: StateChangeListener)
 | Prop         | Type                                      |
 | ------------ | ----------------------------------------- |
 | **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
+
+
+#### ConnectState
+
+| Prop           | Type                 | Description                       | Since |
+| -------------- | -------------------- | --------------------------------- | ----- |
+| **`isActive`** | <code>boolean</code> | Whether the app is active or not. | 1.0.0 |
+
+
+### Type Aliases
+
+
+#### StateChangeListener
+
+<code>(state: <a href="#connectstate">ConnectState</a>): void</code>
 
 </docgen-api>
