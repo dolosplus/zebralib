@@ -13,3 +13,11 @@
 		<string>com.zebra.rawport</string>
 	</array>
 ```
+
+## Reference:
+
+[LINK_OS - libZSDK_API](https://www.zebra.com/us/en/support-downloads/printer-software/link-os-multiplatform-sdk.html)
+
+[Sample Code Repo](https://github.com/ZebraDevs/LinkOS-iOS-Samples)
+
+[API Doc](file:///Applications/link_os_sdk/iOS/v1.5.1049/doc/html/index.html)

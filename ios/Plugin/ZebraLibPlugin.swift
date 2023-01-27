@@ -57,11 +57,58 @@ public class ZebraLibPlugin: CAPPlugin {
 
     @objc func printPDF(_ call: CAPPluginCall) {
         let base64 = call.getString("base64") ?? ""
-//        call.resolve([
-//            "result": zebra.printPDF(base64)
-//        ])
+        let size: JSObject = call.getObject("size") ?? [:]
+        print("ZebraLibPlugin:printPDF() size:",size.keys)
+        var status: Bool = false
+//        var error:NSError?
+//        if JSONSerialization.JSONObjectWithData(size,  options: error) as! NSDictionary == nil{
+//
+//        }
         
-        let status = zebra.printPDF(base64)
+        if size.isEmpty{
+            print("size is empty")
+            let imgSize: ImageSize = ImageSize(x: 0,y: 0,width: -1,height: -1)
+            status = zebra.printPDF(base64,size: imgSize)
+        }else{
+            print(size.keys)
+            print(size.values)
+            let x = size["x"] as? Int ?? 0
+            let y = size["y"] as? Int ?? 0
+            let width = size["width"] as? Int ?? 0
+            let height = size["height"] as? Int ?? 0
+            //print("test=",test)
+            let imgSize: ImageSize = ImageSize(x: x ,y: y,width: width,height: height)
+            status = zebra.printPDF(base64,size: imgSize)
+        }
+        
+        
+//        if JSONSerialization.isValidJSONObject(size){
+//        //if let json = try JSONSerialization.JSONObjectWithData(size,options: JSONSerialization.ReadingOptions(rawValue: 0)) as? [JSObject: Any] {
+//            let imgSize: ImageSize = ImageSize(x: 0,y: 0,width: -1,height: -1)
+//            status = zebra.printPDF(base64,size: imgSize)
+//        }else{
+//            let str = "{\"x\": 0,\"y\": 0,\"width\": -1,\"height\": -1}"
+//            //{x:number,y:number,width:number, height:number}
+//
+//            let data = Data(str.utf8)
+//
+//            do {
+//                // make sure this JSON is in the format we expect
+//                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+//                    print(json)
+//                    status = zebra.printPDF(base64,size: json as NSObject as! ImageSize)
+//                }
+//            } catch let error as NSError {
+//                print("Failed to load: \(error.localizedDescription)")
+//            }
+//
+//        }
+//        if error != nil {
+//            print("Error executing data writing \(String(describing: error))")
+//        }
+
+        
+        //let status = zebra.printPDF(base64,size)
         if(status){
             print("ZebraLibPlugin:printPDF() result",status)
             call.resolve(["result": status])

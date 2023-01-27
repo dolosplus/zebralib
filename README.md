@@ -60,12 +60,12 @@ printText(options: { text: string; }) => Promise<any>
 ### printPDF(...)
 
 ```typescript
-printPDF(options: { base64: string; }) => Promise<any>
+printPDF(options: { base64: string; size?: { x: number; y: number; width: number; height: number; }; }) => Promise<any>
 ```
 
-| Param         | Type                             |
-| ------------- | -------------------------------- |
-| **`options`** | <code>{ base64: string; }</code> |
+| Param         | Type                                                                                              |
+| ------------- | ------------------------------------------------------------------------------------------------- |
+| **`options`** | <code>{ base64: string; size?: { x: number; y: number; width: number; height: number; }; }</code> |
 
 **Returns:** <code>Promise&lt;any&gt;</code>
 

@@ -15,7 +15,7 @@ export interface ZebraLibPlugin {
   //echo(options: { value: string }): Promise<{ value: string }>;
   connectPrinter(options: {config: string}): Promise<any>;
   printText(options: { text: string }): Promise<any>;
-  printPDF(options: { base64: string }): Promise<any>;
+  printPDF(options: { base64: string, size?: {x:number,y:number,width:number, height:number} }): Promise<any>;
   addListener(
     eventName: 'printerStatusChange',
     listenerFunc: StateChangeListener,

@@ -1,11 +1,27 @@
 import Foundation
 import ExternalAccessory
 import UIKit
+import Capacitor
 
 enum CommonPrintingFormat: String {
     case start = "! 0 200 200 150 1"
     case end = "\nFORM\nPRINT\n"
 }
+
+public class ImageSize : NSObject{
+    var x: Int = 0
+    var y: Int = 0
+    var width: Int = -1
+    var height: Int = -1
+
+    init(x: Int, y: Int,width:Int, height: Int) {
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+    }
+}
+
 
 @objc public class ZebraLib: NSObject {
     
@@ -23,6 +39,7 @@ enum CommonPrintingFormat: String {
     private var connectedNotificationObserver: NSObjectProtocol?
     private var zebraPrinter:ZebraPrinter?
     private var zebraPrinterConnection:ZebraPrinterConnection?
+    private var paperSize: ImageSize?
     static let sharedInstance = ZebraLib()
     
     public override init() {
@@ -32,7 +49,7 @@ enum CommonPrintingFormat: String {
     }
     
     public func initPrinterConnection() throws{
-        manager = EAAccessoryManager.shared()
+        self.manager = EAAccessoryManager.shared()
         self.findConnectedPrinter { [weak self] bool in
             if let strongSelf = self {
                 strongSelf.isConnected = bool
@@ -167,16 +184,60 @@ enum CommonPrintingFormat: String {
     
     func printImage(image: UIImage) throws -> Bool {
         do {
+            print("::CAPACITOR:ZEBRALIB: printImage() Image Size: ",image.size)
+            //print("::CAPACITOR:ZEBRALIB: printImage() size:...",(self.paperSize? as AnyObject).x)
             weak var graphicsUtil = self.zebraPrinter?.getGraphicsUtil()
 
+            //image size 72-96px, 208  per inch PPI
             //paper size 384x288 per sq in
+//            let success:Any = try graphicsUtil?.print(
+//                image.cgImage,
+//                atX: 0,
+//                atY: 0,
+//                withWidth: 768,
+//                withHeight: 576,
+//                andIsInsideFormat: false) as Any
+            //3x1 label, offset x=104
+//            let marginX = 26, offset=13
+//            let success:Any = try graphicsUtil?.print(
+//                image.cgImage,
+//                atX: 0,
+//                atY: 0+offset,
+//                withWidth: 624-marginX,
+//                withHeight: 208-marginX,
+//                andIsInsideFormat: false) as Any
+            
+            //4x3 label
+//            let success:Any = try graphicsUtil?.print(
+//                image.cgImage,
+//                atX: 0,
+//                atY: 0,
+//                withWidth: 832,
+//                withHeight: 624,
+//                andIsInsideFormat: false) as Any
+            
+//            let success:Any = try graphicsUtil?.print(
+//                image.cgImage,
+//                atX: 0,
+//                atY: 0,
+//                withWidth: -1,
+//                withHeight: -1,
+//                andIsInsideFormat: false) as Any
+            
+            print("::CAPACITOR:ZEBRALIB: PEPER SIZE x: ",self.paperSize?.x)
+            print("::CAPACITOR:ZEBRALIB: PEPER SIZE y: ",self.paperSize?.y)
+            print("::CAPACITOR:ZEBRALIB: PEPER SIZE width: ",self.paperSize?.width)
+            print("::CAPACITOR:ZEBRALIB: PEPER SIZE height: ",self.paperSize?.height)
+            
             let success:Any = try graphicsUtil?.print(
-                image.cgImage,
-                atX: 0,
-                atY: 0,
-                withWidth: 768,
-                withHeight: 576,
+                    image.cgImage,
+                    atX: self.paperSize!.x,
+                    atY: self.paperSize!.y,
+                    withWidth: self.paperSize!.width,
+                    withHeight: self.paperSize!.height,
                 andIsInsideFormat: false) as Any
+
+            
             
             print("::CAPACITOR:ZEBRALIB: print status: ",success)
             if(success != nil){
@@ -224,7 +285,8 @@ enum CommonPrintingFormat: String {
 
     
     private func findConnectedPrinter(completion: (Bool) -> Void) {
-        let connectedDevices = manager.connectedAccessories
+        let connectedDevices = self.manager.connectedAccessories
+        print("::CAPACITOR:ZEBRALIB: findConnectedPrinter(): ",connectedDevices.count)
         for device in connectedDevices {
             if device.protocolStrings.contains("com.zebra.rawport") {
                 serialNumber = device.serialNumber
@@ -241,7 +303,16 @@ enum CommonPrintingFormat: String {
 //        return value
 //    }
 
-    @objc public func printPDF(_ base64: String) -> Bool {
+    @objc public func printPDF(_ base64: String,size: ImageSize) -> Bool {
+        self.paperSize = size
+        //let json = try JSONSerialization.jsonObject(with: size as! Data)
+        //var dictonary:NSDictionary?
+
+        print("::CAPACITOR:ZEBRALIB: printPDF() size:...",self.paperSize?.x)
+        //dictonary = try JSONSerialization.jsonObject(with: size, options: []) as? [String:AnyObject]
+        
+        //print("::CAPACITOR:ZEBRALIB: printPDF() size:...",self.paperSize?.value(forKey: "width") as Any)
+        //print("::CAPACITOR:ZEBRALIB: printPDF() json:...",json)
         print("::CAPACITOR:ZEBRALIB: printPDF() data:...",base64.prefix(10))//only log partial data
         return printBase64PDFPages(base64: base64)
     }

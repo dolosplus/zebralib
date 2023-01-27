@@ -18,7 +18,7 @@ export class ZebraLibWeb extends WebPlugin implements ZebraLibPlugin {
     return options;
   }
 
-  async printPDF(options: { base64: string }): Promise<any> {
+  async printPDF(options: { base64: string, size?: {x:number,y:number,width:number, height:number}}): Promise<any> {
     console.log('Web Zebra Print is not supported', options);
     return options;
   }
